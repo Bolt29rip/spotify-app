@@ -31,22 +31,38 @@
 
     <!-- Main Content -->
     <div class="flex flex-1 overflow-hidden">
-        <aside class="w-64 bg-zinc-950 border-r border-zinc-800 p-4 hidden md:block">
-            <h2 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3 px-2">Quick Genres</h2>
-            <nav class="space-y-1">
-                <button onclick="searchMusic('Trending Music 2026')" class="w-full text-left px-3 py-2 rounded-lg bg-zinc-800 text-white text-sm font-medium flex items-center space-x-3">
-                    <i class="fa-solid fa-fire text-red-500"></i>
-                    <span>Trending Now</span>
-                </button>
-                <button onclick="searchMusic('Top Pop Hits')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white text-sm font-medium flex items-center space-x-3">
-                    <i class="fa-solid fa-music"></i>
-                    <span>Pop Hits</span>
-                </button>
-                <button onclick="searchMusic('Popular Podcasts')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white text-sm font-medium flex items-center space-x-3">
-                    <i class="fa-solid fa-podcast"></i>
-                    <span>Podcasts</span>
-                </button>
-            </nav>
+        <aside class="w-64 bg-zinc-950 border-r border-zinc-800 p-4 hidden md:flex flex-col justify-between">
+            <div class="space-y-6">
+                <div>
+                    <h2 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3 px-2">Quick Genres</h2>
+                    <nav class="space-y-1">
+                        <button onclick="searchMusic('Trending Music Hits')" class="w-full text-left px-3 py-2 rounded-lg bg-zinc-800 text-white text-sm font-medium flex items-center space-x-3">
+                            <i class="fa-solid fa-fire text-red-500"></i>
+                            <span>Trending Now</span>
+                        </button>
+                        <button onclick="searchMusic('Top Pop Hits')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white text-sm font-medium flex items-center space-x-3">
+                            <i class="fa-solid fa-music"></i>
+                            <span>Pop Hits</span>
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Spotify Import Feature -->
+                <div>
+                    <h2 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3 px-2">Import Playlist</h2>
+                    <div class="space-y-2 px-2">
+                        <input id="spotifyUrlInput" type="text" placeholder="Paste Spotify Playlist Link..." 
+                            class="w-full bg-zinc-800 text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-red-500">
+                        <button onclick="importSpotifyPlaylist()" class="w-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold py-2 rounded-lg transition">
+                            Import Playlist
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-xs text-zinc-600 px-2">
+                YouTube Music Engine
+            </div>
         </aside>
 
         <main class="flex-1 bg-zinc-900/50 p-6 overflow-y-auto">
@@ -116,6 +132,20 @@
             } catch (err) {
                 console.error("API Error:", err);
             }
+        }
+
+        // Import feature for public Spotify links
+        async function importSpotifyPlaylist() {
+            const input = document.getElementById('spotifyUrlInput').value.trim();
+            if (!input) return;
+
+            document.getElementById('sectionTitle').textContent = "Importing Playlist...";
+
+            // Extract playlist search term from input link
+            const cleanQuery = input.split('?')[0].split('/').pop();
+            
+            // Search track matches on YouTube Engine
+            searchMusic(`Spotify Playlist ${cleanQuery}`);
         }
 
         function renderGrid(items) {
