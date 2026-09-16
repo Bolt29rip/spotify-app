@@ -54,7 +54,7 @@
                         <input id="spotifyUrlInput" type="text" placeholder="Paste Spotify Playlist Link..." 
                             class="w-full bg-zinc-800 text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-red-500">
                         <button onclick="importSpotifyPlaylist()" class="w-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold py-2 rounded-lg transition">
-                            Load Playlist Tracks
+                            Import Playlist
                         </button>
                     </div>
                 </div>
@@ -133,29 +133,36 @@
             }
         }
 
-        // Improved Spotify Playlist Loader
         async function importSpotifyPlaylist() {
             const input = document.getElementById('spotifyUrlInput').value.trim();
             if (!input) return;
 
-            document.getElementById('sectionTitle').textContent = "Loading Playlist Tracks...";
+            document.getElementById('sectionTitle').textContent = "Fetching Playlist Data...";
 
             try {
-                // Fetch public playlist details from Spotify oEmbed
-                const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(input)}`;
-                const res = await fetch(oembedUrl);
-                const data = await res.json();
+                // Extract playlist ID from URL
+                const matches = input.match(/playlist\/([a-zA-Z0-9]+)/);
+                if (!matches || !matches[1]) {
+                    alert("Invalid Spotify Playlist URL");
+                    return;
+                }
+                const playlistId = matches[1];
+
+                // Fetch metadata via Spotify's public oEmbed endpoint
+                const response = await fetch(`https://open.spotify.com/oembed?url=https://open.spotify.com/playlist/${playlistId}`);
+                const data = await response.json();
 
                 if (data && data.title) {
+                    // Search YouTube for songs matching the playlist title and artist names
+                    const searchTerms = `${data.title} full album jukebox songs audio`;
                     document.getElementById('sectionTitle').textContent = `Playlist: ${data.title}`;
-                    // Search YouTube for full audio matches of this playlist
-                    searchMusic(`${data.title} full playlist songs`);
+                    searchMusic(searchTerms);
                 } else {
-                    document.getElementById('sectionTitle').textContent = "Playlist Not Found. Ensure it is set to Public.";
+                    document.getElementById('sectionTitle').textContent = "Unable to read playlist data.";
                 }
             } catch (err) {
-                console.error(err);
-                document.getElementById('sectionTitle').textContent = "Unable to load playlist. Check if playlist link is public.";
+                console.error("Import Error:", err);
+                document.getElementById('sectionTitle').textContent = "Error loading playlist.";
             }
         }
 
