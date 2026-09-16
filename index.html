@@ -25,7 +25,7 @@
         </div>
 
         <div class="text-xs text-zinc-400 bg-zinc-800 px-3 py-1.5 rounded-full border border-zinc-700">
-            Free API Active
+            Free Engine Active
         </div>
     </header>
 
@@ -49,19 +49,19 @@
 
                 <!-- Spotify Import Feature -->
                 <div>
-                    <h2 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3 px-2">Import Playlist</h2>
+                    <h2 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3 px-2">Import Spotify Playlist</h2>
                     <div class="space-y-2 px-2">
                         <input id="spotifyUrlInput" type="text" placeholder="Paste Spotify Playlist Link..." 
                             class="w-full bg-zinc-800 text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-red-500">
                         <button onclick="importSpotifyPlaylist()" class="w-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold py-2 rounded-lg transition">
-                            Import Playlist
+                            Load Playlist Tracks
                         </button>
                     </div>
                 </div>
             </div>
 
             <div class="text-xs text-zinc-600 px-2">
-                YouTube Music Engine
+                YouTube Playback Engine
             </div>
         </aside>
 
@@ -96,7 +96,6 @@
     </footer>
 
     <script>
-        // REPLACE WITH YOUR FREE GOOGLE YOUTUBE API KEY
         const API_KEY = 'AIzaSyDU2YnkaSoDVIquAVH-A3ayRcByayhpAkA';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -134,18 +133,30 @@
             }
         }
 
-        // Import feature for public Spotify links
+        // Improved Spotify Playlist Loader
         async function importSpotifyPlaylist() {
             const input = document.getElementById('spotifyUrlInput').value.trim();
             if (!input) return;
 
-            document.getElementById('sectionTitle').textContent = "Importing Playlist...";
+            document.getElementById('sectionTitle').textContent = "Loading Playlist Tracks...";
 
-            // Extract playlist search term from input link
-            const cleanQuery = input.split('?')[0].split('/').pop();
-            
-            // Search track matches on YouTube Engine
-            searchMusic(`Spotify Playlist ${cleanQuery}`);
+            try {
+                // Fetch public playlist details from Spotify oEmbed
+                const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(input)}`;
+                const res = await fetch(oembedUrl);
+                const data = await res.json();
+
+                if (data && data.title) {
+                    document.getElementById('sectionTitle').textContent = `Playlist: ${data.title}`;
+                    // Search YouTube for full audio matches of this playlist
+                    searchMusic(`${data.title} full playlist songs`);
+                } else {
+                    document.getElementById('sectionTitle').textContent = "Playlist Not Found. Ensure it is set to Public.";
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('sectionTitle').textContent = "Unable to load playlist. Check if playlist link is public.";
+            }
         }
 
         function renderGrid(items) {
