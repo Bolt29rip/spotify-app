@@ -3,30 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streamify - Music & Podcasts</title>
-    <!-- Tailwind CSS for sleek, clean UI -->
+    <title>Streamify - Unlimited Free Music & Podcasts</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #121212;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #282828;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3e3e3e;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #121212; }
+        ::-webkit-scrollbar-thumb { background: #282828; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3e3e3e; }
     </style>
 </head>
 <body class="bg-black text-white font-sans antialiased h-screen flex flex-col overflow-hidden">
 
-    <!-- Top Navigation Bar -->
+    <!-- Top Navigation -->
     <header class="bg-zinc-900 border-b border-zinc-800 px-6 py-4 flex justify-between items-center z-10">
         <div class="flex items-center space-x-3">
             <i class="fa-brands fa-spotify text-green-500 text-3xl"></i>
@@ -37,12 +27,12 @@
         <div class="flex-1 max-w-md mx-6">
             <div class="relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-zinc-400"></i>
-                <input id="searchInput" type="text" placeholder="Search songs, artists, or podcasts..." 
+                <input id="searchInput" type="text" placeholder="Search any song, artist, or podcast..." 
                     class="w-full bg-zinc-800 text-white rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition">
             </div>
         </div>
 
-        <!-- User Authentication -->
+        <!-- Auth -->
         <div>
             <button id="loginBtn" onclick="loginWithSpotify()" class="bg-green-500 hover:bg-green-400 text-black font-semibold px-5 py-2.5 rounded-full text-sm transition flex items-center space-x-2">
                 <i class="fa-brands fa-spotify text-lg"></i>
@@ -56,7 +46,7 @@
         </div>
     </header>
 
-    <!-- Main Content Layout -->
+    <!-- Main Layout -->
     <div class="flex flex-1 overflow-hidden">
         
         <!-- Sidebar -->
@@ -73,7 +63,7 @@
                 </div>
 
                 <div>
-                    <h2 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3 px-2">Your Library</h2>
+                    <h2 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3 px-2">Your Playlists</h2>
                     <div id="playlistsList" class="space-y-1 max-h-64 overflow-y-auto pr-1">
                         <p id="noPlaylistsMsg" class="text-xs text-zinc-500 px-2">Connect Spotify account to load your playlists.</p>
                     </div>
@@ -81,55 +71,56 @@
             </div>
 
             <div class="text-xs text-zinc-600 px-2">
-                Powered by Spotify Web API
+                Spotify Metadata + YouTube Full Player
             </div>
         </aside>
 
-        <!-- Main Display Container -->
+        <!-- Main Display -->
         <main class="flex-1 bg-zinc-900/50 p-6 overflow-y-auto">
             <div class="max-w-6xl mx-auto">
                 <h1 id="sectionTitle" class="text-2xl font-bold mb-6">Latest Releases & Podcasts</h1>
                 <div id="contentGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    <!-- Cards dynamically injected here -->
+                    <!-- Cards dynamic -->
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Audio Player Bar -->
+    <!-- Bottom Audio Player -->
     <footer class="bg-zinc-950 border-t border-zinc-800 px-6 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-4 w-1/4">
+        <div class="flex items-center space-x-4 w-1/3">
             <img id="nowPlayingImg" class="w-12 h-12 rounded bg-zinc-800 object-cover" src="https://via.placeholder.com/48?text=Music" alt="Album Cover">
             <div class="truncate">
                 <p id="nowPlayingTitle" class="text-sm font-medium text-white truncate">Select a track</p>
-                <p id="nowPlayingArtist" class="text-xs text-zinc-400 truncate">Spotify Preview Player</p>
+                <p id="nowPlayingArtist" class="text-xs text-zinc-400 truncate">Full track playback enabled</p>
             </div>
         </div>
 
-        <!-- Embedded Web Player / Spotify Embed -->
-        <div class="flex-1 max-w-xl mx-4">
-            <iframe id="spotifyEmbed" src="" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" class="rounded-lg hidden"></iframe>
-            <div id="placeholderPlayer" class="text-center text-xs text-zinc-500">
-                Click on any song to start listening.
+        <!-- YouTube Embed Player for Full Unrestricted Audio -->
+        <div class="w-1/3 flex justify-center">
+            <div id="playerContainer" class="w-full h-16 rounded-lg overflow-hidden hidden bg-black">
+                <iframe id="youtubeEmbed" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div id="placeholderPlayer" class="text-center text-xs text-zinc-500 flex items-center">
+                Click any song to stream full audio.
             </div>
         </div>
 
-        <div class="w-1/4 flex justify-end">
-            <!-- Reserved for potential extra controls -->
+        <div class="w-1/3 flex justify-end text-xs text-zinc-500">
+            <span class="bg-zinc-800 px-3 py-1 rounded-full text-green-400 font-semibold">100% Free Full Length</span>
         </div>
     </footer>
 
-    <!-- Application Script -->
+    <!-- Script -->
     <script>
         // ================= CONFIGURATION =================
-        const CLIENT_ID = 'YOUR_SPOTIFY_CLIENT_ID_HERE'; // Replace with your Spotify Client ID
+        const CLIENT_ID = 'YOUR_SPOTIFY_CLIENT_ID_HERE'; // Replace with Spotify Client ID
         const REDIRECT_URI = window.location.href.split('#')[0].split('?')[0];
         const SCOPES = 'user-read-private user-read-email playlist-read-private playlist-read-collaborative';
         // =================================================
 
         let accessToken = null;
 
-        // Initialize App
         window.addEventListener('DOMContentLoaded', async () => {
             handleAuthCallback();
             
@@ -138,7 +129,6 @@
                 fetchUserPlaylists();
             }
             
-            // Search listener with debounce
             let timeout = null;
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 clearTimeout(timeout);
@@ -152,11 +142,9 @@
                 }, 400);
             });
 
-            // Load initial homepage content
             loadFeatured();
         });
 
-        // 1. Authentication (Implicit Grant Flow)
         function loginWithSpotify() {
             const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
             window.location.href = authUrl;
@@ -169,7 +157,7 @@
             if (token) {
                 accessToken = token;
                 localStorage.setItem('spotify_token', token);
-                window.location.hash = ''; // Clear URL hash
+                window.location.hash = '';
             } else {
                 accessToken = localStorage.getItem('spotify_token');
             }
@@ -181,18 +169,13 @@
             window.location.reload();
         }
 
-        // Helper function for API requests (Uses Client Credentials token fallback if user isn't logged in)
         async function apiFetch(endpoint) {
-            if (!accessToken) {
-                // Return null if not authenticated (User will be prompted to login for full search/playlists)
-                return null;
-            }
+            if (!accessToken) return null;
             try {
                 const res = await fetch(`https://api.spotify.com/v1/${endpoint}`, {
                     headers: { 'Authorization': `Bearer ${accessToken}` }
                 });
                 if (res.status === 401) {
-                    // Token expired
                     logout();
                     return null;
                 }
@@ -203,7 +186,6 @@
             }
         }
 
-        // 2. User Data & Playlists
         async function fetchUserProfile() {
             const data = await apiFetch('me');
             if (data) {
@@ -237,9 +219,8 @@
             }
         }
 
-        // 3. Main Display Functions
         async function loadFeatured() {
-            document.getElementById('sectionTitle').textContent = "New Releases & Latest Content";
+            document.getElementById('sectionTitle').textContent = "New Releases & Podcasts";
             if (!accessToken) {
                 showLoginPrompt();
                 return;
@@ -249,11 +230,9 @@
             if (data && data.albums) {
                 renderGrid(data.albums.items.map(album => ({
                     id: album.id,
-                    uri: album.uri,
                     title: album.name,
                     subtitle: album.artists.map(a => a.name).join(', '),
-                    image: album.images[0]?.url,
-                    type: 'album'
+                    image: album.images[0]?.url
                 })));
             }
         }
@@ -265,38 +244,29 @@
                 return;
             }
 
-            const data = await apiFetch(`search?q=${encodeURIComponent(query)}&type=track,show,episode&limit=20`);
+            const data = await apiFetch(`search?q=${encodeURIComponent(query)}&type=track,show&limit=20`);
             if (data) {
                 const results = [];
-                
-                // Tracks
                 if (data.tracks) {
                     data.tracks.items.forEach(track => {
                         results.push({
                             id: track.id,
-                            uri: track.uri,
                             title: track.name,
-                            subtitle: `Song • ${track.artists.map(a => a.name).join(', ')}`,
-                            image: track.album.images[0]?.url,
-                            type: 'track'
+                            subtitle: `${track.artists.map(a => a.name).join(', ')}`,
+                            image: track.album.images[0]?.url
                         });
                     });
                 }
-                
-                // Podcasts/Shows
                 if (data.shows) {
                     data.shows.items.forEach(show => {
                         results.push({
                             id: show.id,
-                            uri: show.uri,
                             title: show.name,
                             subtitle: `Podcast • ${show.publisher}`,
-                            image: show.images[0]?.url,
-                            type: 'show'
+                            image: show.images[0]?.url
                         });
                     });
                 }
-
                 renderGrid(results);
             }
         }
@@ -309,17 +279,14 @@
                     .filter(item => item.track)
                     .map(item => ({
                         id: item.track.id,
-                        uri: item.track.uri,
                         title: item.track.name,
                         subtitle: item.track.artists.map(a => a.name).join(', '),
-                        image: item.track.album.images[0]?.url,
-                        type: 'track'
+                        image: item.track.album.images[0]?.url
                     }));
                 renderGrid(tracks);
             }
         }
 
-        // 4. UI Rendering & Player Controls
         function renderGrid(items) {
             const grid = document.getElementById('contentGrid');
             grid.innerHTML = '';
@@ -350,24 +317,23 @@
             });
         }
 
+        // FULL FREE PLAYBACK FUNCTION (YouTube Search Embed Engine)
         function playMedia(item) {
-            // Update Now Playing Metadata
             document.getElementById('nowPlayingImg').src = item.image;
             document.getElementById('nowPlayingTitle').textContent = item.title;
             document.getElementById('nowPlayingArtist').textContent = item.subtitle;
 
-            // Update Embedded Player (Spotify iFrame widget handles full song/episode playback)
-            const embed = document.getElementById('spotifyEmbed');
+            // Search query for the track full audio
+            const searchQuery = encodeURIComponent(`${item.title} ${item.subtitle}`);
+            const youtubeEmbedUrl = `https://www.youtube.com/embed?listType=search&list=${searchQuery}&autoplay=1`;
+
+            const container = document.getElementById('playerContainer');
             const placeholder = document.getElementById('placeholderPlayer');
-            
-            // Format URI to Embed URL: e.g. spotify:track:xyz -> https://open.spotify.com/embed/track/xyz
-            const parts = item.uri.split(':');
-            if (parts.length === 3) {
-                const embedUrl = `https://open.spotify.com/embed/${parts[1]}/${parts[2]}?utm_source=generator&theme=0`;
-                embed.src = embedUrl;
-                embed.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            }
+            const iframe = document.getElementById('youtubeEmbed');
+
+            iframe.src = youtubeEmbedUrl;
+            container.classList.remove('hidden');
+            placeholder.classList.add('hidden');
         }
 
         function showLoginPrompt() {
@@ -376,7 +342,7 @@
                 <div class="col-span-full text-center py-16 bg-zinc-800/20 rounded-xl border border-zinc-800">
                     <i class="fa-brands fa-spotify text-green-500 text-5xl mb-4"></i>
                     <h2 class="text-xl font-bold mb-2">Connect Your Spotify Account</h2>
-                    <p class="text-zinc-400 text-sm max-w-md mx-auto mb-6">Connect your Spotify account to search songs, podcasts, view daily new releases, and load your personal playlists.</p>
+                    <p class="text-zinc-400 text-sm max-w-md mx-auto mb-6">Connect your Spotify account to search songs, podcasts, view daily new releases, and load your personal playlists with full playback.</p>
                     <button onclick="loginWithSpotify()" class="bg-green-500 hover:bg-green-400 text-black font-semibold px-6 py-3 rounded-full text-sm transition">
                         Connect Spotify Account
                     </button>
